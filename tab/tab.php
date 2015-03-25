@@ -1,0 +1,1 @@
+<fb:swf swfbgcolor="000000" imgstyle="border-width:3px; border-color:white;" swfsrc='http://businessgame.be/SudoTrix/SudoTrix.swf' imgsrc='http://businessgame.be/SudoTrix/assets/skins/logo.png' width='600' height='570' />

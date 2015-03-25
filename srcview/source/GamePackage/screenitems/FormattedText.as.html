@@ -1,0 +1,90 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>FormattedText.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">screenitems</span> <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptOperator">*</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * @author Gilles Lesire - 2009
+     * This class builds a text
+     * - creates the textfont
+     * - set the text format
+     * - creates a text
+     */</span>     
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">FormattedText</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Sprite</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Embed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;assets/fonts/showgothic.ttf&quot;</span>, <span class="ActionScriptDefault_Text">fontName</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;myFont&quot;</span>, <span class="ActionScriptDefault_Text">mimeType</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;application/x-font-truetype&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">FONT_MYFONT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+            
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">formatText</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextFormat</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">textText</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">FormattedText</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">formatText</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextFormat</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">formatText</span>.<span class="ActionScriptDefault_Text">align</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TextFormatAlign</span>.<span class="ActionScriptDefault_Text">CENTER</span>;
+            <span class="ActionScriptDefault_Text">formatText</span>.<span class="ActionScriptDefault_Text">color</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">x000000</span>;
+            <span class="ActionScriptDefault_Text">formatText</span>.<span class="ActionScriptDefault_Text">font</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;myFont&quot;</span>;
+            
+            <span class="ActionScriptDefault_Text">textText</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatText</span>;
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;    
+            
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">textText</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">text</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">text</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">text</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">text</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">text</span>;
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">setTextFormat</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">formatText</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">width</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">width</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">width</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">width</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">width</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">wordWrap</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">wordWrap</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">wordWrap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">wordWrap</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">size</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">size</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">formatText</span>.<span class="ActionScriptDefault_Text">size</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">size</span>;
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">setTextFormat</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">formatText</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">color</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">color</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">formatText</span>.<span class="ActionScriptDefault_Text">color</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">color</span>;
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">setTextFormat</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">formatText</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">align</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">align</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">formatText</span>.<span class="ActionScriptDefault_Text">align</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">align</span>;
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">setTextFormat</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">formatText</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">autoSize</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">autoSize</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">autoSize</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">autoSize</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">selectable</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">selectable</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">selectable</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">selectable</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">mouseEnabled</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">mouseEnabled</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">textText</span>.<span class="ActionScriptDefault_Text">mouseEnabled</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">mouseEnabled</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

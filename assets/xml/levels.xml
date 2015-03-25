@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<levels>
+	<level id="1">
+	  	<levelLevel>1</levelLevel>
+		<levelGoal>350</levelGoal>
+		<levelSpeed>1</levelSpeed>
+		<levelBombs>5</levelBombs>
+	</level>
+	<level id="2">
+	  	<levelLevel>2</levelLevel>
+		<levelGoal>700</levelGoal>
+		<levelSpeed>1</levelSpeed>
+		<levelBombs>5</levelBombs>
+	</level>
+	<level id="3">
+	  	<levelLevel>3</levelLevel>
+		<levelGoal>1050</levelGoal>
+		<levelSpeed>1</levelSpeed>
+		<levelBombs>5</levelBombs>
+	</level>
+	<level id="4">
+	  	<levelLevel>4</levelLevel>
+		<levelGoal>1400</levelGoal>
+		<levelSpeed>1</levelSpeed>
+		<levelBombs>5</levelBombs>
+	</level>
+	<level id="5">
+	  	<levelLevel>5</levelLevel>
+		<levelGoal>1750</levelGoal>
+		<levelSpeed>1</levelSpeed>
+		<levelBombs>5</levelBombs>
+	</level>
+	<level id="6">
+	  	<levelLevel>6</levelLevel>
+		<levelGoal>2100</levelGoal>
+		<levelSpeed>1</levelSpeed>
+		<levelBombs>5</levelBombs>
+	</level>
+	<level id="7">
+	  	<levelLevel>7</levelLevel>
+		<levelGoal>2450</levelGoal>
+		<levelSpeed>1</levelSpeed>
+		<levelBombs>5</levelBombs>
+	</level>
+	<level id="8">
+	  	<levelLevel>8</levelLevel>
+		<levelGoal>2800</levelGoal>
+		<levelSpeed>1</levelSpeed>
+		<levelBombs>5</levelBombs>
+	</level>
+	<level id="9">
+	  	<levelLevel>9</levelLevel>
+		<levelGoal>3150</levelGoal>
+		<levelSpeed>1</levelSpeed>
+		<levelBombs>5</levelBombs>
+	</level>
+	<level id="10">
+	  	<levelLevel>10</levelLevel>
+		<levelGoal>3500</levelGoal>
+		<levelSpeed>1</levelSpeed>
+		<levelBombs>5</levelBombs>
+	</level>
+</levels>

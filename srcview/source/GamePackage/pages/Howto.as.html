@@ -1,0 +1,92 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Howto.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">pages</span> <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">screenitems</span>.<span class="ActionScriptOperator">*</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptOperator">*</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">BitmapAsset</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * @author Gilles Lesire - 2009
+     * This class builds the how to play page
+     * - creates the text and the logo
+     * - set listener for the back to menu button
+     */</span>    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Howto</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Sprite</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Embed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;assets/skins/logo.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span> <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Logo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span>;
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Embed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;assets/fonts/showgothic.ttf&quot;</span>, <span class="ActionScriptDefault_Text">fontName</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;myFont&quot;</span>, <span class="ActionScriptDefault_Text">mimeType</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;application/x-font-truetype&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">FONT_MYFONT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">OPEN_MENU</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;OpenMenu&quot;</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">formatText</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextFormat</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">text</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">btnMain</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Button</span>;  
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">logo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BitmapAsset</span>; 
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">title</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Button</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Howto</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">btnMain</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Button</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;Main menu&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">btnMain</span>.<span class="ActionScriptDefault_Text">addMouseEffects</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">btnMain</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 525;
+            <span class="ActionScriptDefault_Text">btnMain</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 505;
+            <span class="ActionScriptDefault_Text">btnMain</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">CLICK</span>, <span class="ActionScriptDefault_Text">openMenu</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">logo</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Logo</span><span class="ActionScriptBracket/Brace">()</span>;        
+            <span class="ActionScriptDefault_Text">logo</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 455;
+            <span class="ActionScriptDefault_Text">logo</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 25;
+            
+            <span class="ActionScriptDefault_Text">title</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Button</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;How to play&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">title</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 54;
+            <span class="ActionScriptDefault_Text">title</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 52;
+            
+            <span class="ActionScriptDefault_Text">formatText</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextFormat</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">formatText</span>.<span class="ActionScriptDefault_Text">align</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TextFormatAlign</span>.<span class="ActionScriptDefault_Text">LEFT</span>;
+            <span class="ActionScriptDefault_Text">formatText</span>.<span class="ActionScriptDefault_Text">color</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">x7BADDB</span>;
+            <span class="ActionScriptDefault_Text">formatText</span>.<span class="ActionScriptDefault_Text">font</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;myFont&quot;</span>;
+            <span class="ActionScriptDefault_Text">formatText</span>.<span class="ActionScriptDefault_Text">size</span> <span class="ActionScriptOperator">=</span> 18;
+            
+            <span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;        
+            <span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatText</span>;
+            <span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">wordWrap</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;SudoTrix is a fun combinations of tetris and Sudoku.\n\n&quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;Just as in Sudoku, you need to fill the grid with each &quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;row, line and box with the number 1 to 9.\n\n&quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;But it is not as easy as you think, you can&apos;t choose the numbers!\n\n&quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;The goal of the game is to beat all levels.\n&quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;Each level the score you have to get will rise.\n&quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;\n&quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;Use the arrow keys to navigate the brick.\n&quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;You can turn a brick into a bomb\n&quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;with the up key.\n\n&quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;You have 5 bombs at the start of a new level, but you gain an extra one &quot;</span> <span class="ActionScriptOperator">+</span> 
+                    <span class="ActionScriptString">&quot;for each full line you make.&quot;</span>;
+            <span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 60;
+            <span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 120;
+            <span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">width</span> <span class="ActionScriptOperator">=</span> 590;
+            <span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">height</span> <span class="ActionScriptOperator">=</span> 385;
+            
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">btnMain</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">logo</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">title</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">text</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">openMenu</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">OPEN_MENU</span><span class="ActionScriptBracket/Brace">))</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

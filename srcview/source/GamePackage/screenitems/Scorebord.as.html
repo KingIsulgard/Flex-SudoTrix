@@ -1,0 +1,144 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Scorebord.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">screenitems</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">model</span>.<span class="ActionScriptOperator">*</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptOperator">*</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * @author Gilles Lesire - 2009
+     * This class builds the game interface
+     * - creates text fields and labels of game information
+     * - updates text fields when called
+     */</span>    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Scorebord</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Sprite</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Embed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;assets/fonts/showgothic.ttf&quot;</span>, <span class="ActionScriptDefault_Text">fontName</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;myFont&quot;</span>, <span class="ActionScriptDefault_Text">mimeType</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;application/x-font-truetype&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">FONT_MYFONT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">formatLabels</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextFormat</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">formatTexts</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextFormat</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lblLevel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">txtLevel</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lblGoal</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">txtGoal</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lblScore</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">txtScore</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lblBombs</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">txtBombs</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">lblErrors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">txtErrors</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextField</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Scorebord</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">formatLabels</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextFormat</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">formatLabels</span>.<span class="ActionScriptDefault_Text">align</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TextFormatAlign</span>.<span class="ActionScriptDefault_Text">LEFT</span>;
+            <span class="ActionScriptDefault_Text">formatLabels</span>.<span class="ActionScriptDefault_Text">color</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">x7BADDB</span>;
+            <span class="ActionScriptDefault_Text">formatLabels</span>.<span class="ActionScriptDefault_Text">font</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;myFont&quot;</span>;
+            <span class="ActionScriptDefault_Text">formatLabels</span>.<span class="ActionScriptDefault_Text">size</span> <span class="ActionScriptOperator">=</span> 18;
+            
+            <span class="ActionScriptDefault_Text">formatTexts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextFormat</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">formatTexts</span>.<span class="ActionScriptDefault_Text">align</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">TextFormatAlign</span>.<span class="ActionScriptDefault_Text">RIGHT</span>;
+            <span class="ActionScriptDefault_Text">formatTexts</span>.<span class="ActionScriptDefault_Text">color</span> <span class="ActionScriptOperator">=</span> 0<span class="ActionScriptDefault_Text">x7BADDB</span>;
+            <span class="ActionScriptDefault_Text">formatTexts</span>.<span class="ActionScriptDefault_Text">font</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;myFont&quot;</span>;
+            <span class="ActionScriptDefault_Text">formatTexts</span>.<span class="ActionScriptDefault_Text">size</span> <span class="ActionScriptOperator">=</span> 18;
+            
+            <span class="ActionScriptDefault_Text">lblLevel</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">txtLevel</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">lblGoal</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">txtGoal</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">lblScore</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">txtScore</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">lblBombs</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;        
+            <span class="ActionScriptDefault_Text">txtBombs</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;        
+            <span class="ActionScriptDefault_Text">lblErrors</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">txtErrors</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">TextField</span><span class="ActionScriptBracket/Brace">()</span>;        
+            
+            <span class="ActionScriptDefault_Text">lblLevel</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">lblLevel</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatLabels</span>;
+            <span class="ActionScriptDefault_Text">txtLevel</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">txtLevel</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatTexts</span>;
+            <span class="ActionScriptDefault_Text">lblGoal</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">lblGoal</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatLabels</span>;
+            <span class="ActionScriptDefault_Text">txtGoal</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">txtGoal</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatTexts</span>;
+            <span class="ActionScriptDefault_Text">lblScore</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">lblScore</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatLabels</span>;
+            <span class="ActionScriptDefault_Text">txtScore</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">txtScore</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatTexts</span>;
+            <span class="ActionScriptDefault_Text">lblBombs</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">lblBombs</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatLabels</span>;
+            <span class="ActionScriptDefault_Text">txtBombs</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">txtBombs</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatTexts</span>;
+            <span class="ActionScriptDefault_Text">lblErrors</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">lblErrors</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatLabels</span>;
+            <span class="ActionScriptDefault_Text">txtErrors</span>.<span class="ActionScriptDefault_Text">embedFonts</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptDefault_Text">txtErrors</span>.<span class="ActionScriptDefault_Text">defaultTextFormat</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">formatTexts</span>;            
+            
+            <span class="ActionScriptDefault_Text">lblLevel</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Level&quot;</span>;
+            <span class="ActionScriptDefault_Text">lblGoal</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Goal&quot;</span>;
+            <span class="ActionScriptDefault_Text">lblScore</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Score&quot;</span>;    
+            <span class="ActionScriptDefault_Text">lblBombs</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Bombs&quot;</span>;
+            <span class="ActionScriptDefault_Text">lblErrors</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Errors&quot;</span>;         
+            
+            <span class="ActionScriptDefault_Text">lblLevel</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 445;
+            <span class="ActionScriptDefault_Text">lblLevel</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 135;
+            
+            <span class="ActionScriptDefault_Text">txtLevel</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 565;
+            <span class="ActionScriptDefault_Text">txtLevel</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 135;
+            
+            <span class="ActionScriptDefault_Text">lblGoal</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 445;
+            <span class="ActionScriptDefault_Text">lblGoal</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 165;
+            
+            <span class="ActionScriptDefault_Text">txtGoal</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 565;
+            <span class="ActionScriptDefault_Text">txtGoal</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 165;
+            
+            <span class="ActionScriptDefault_Text">lblScore</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 445;
+            <span class="ActionScriptDefault_Text">lblScore</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 225;
+            
+            <span class="ActionScriptDefault_Text">txtScore</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 565;
+            <span class="ActionScriptDefault_Text">txtScore</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 225;
+            
+            <span class="ActionScriptDefault_Text">lblBombs</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 445;
+            <span class="ActionScriptDefault_Text">lblBombs</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 255;
+            
+            <span class="ActionScriptDefault_Text">txtBombs</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 565;
+            <span class="ActionScriptDefault_Text">txtBombs</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 255;
+            
+            <span class="ActionScriptDefault_Text">lblErrors</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 445;
+            <span class="ActionScriptDefault_Text">lblErrors</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 285;
+            
+            <span class="ActionScriptDefault_Text">txtErrors</span>.<span class="ActionScriptDefault_Text">x</span> <span class="ActionScriptOperator">=</span> 565;
+            <span class="ActionScriptDefault_Text">txtErrors</span>.<span class="ActionScriptDefault_Text">y</span> <span class="ActionScriptOperator">=</span> 285;
+            
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lblLevel</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">txtLevel</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lblGoal</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">txtGoal</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lblScore</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">txtScore</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lblBombs</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">txtBombs</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lblErrors</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">txtErrors</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">update</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">levelData</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">LevelData</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">txtLevel</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">levelData</span>.<span class="ActionScriptDefault_Text">level</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">txtGoal</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">levelData</span>.<span class="ActionScriptDefault_Text">goal</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">txtScore</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">levelData</span>.<span class="ActionScriptDefault_Text">currentScore</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">txtBombs</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">levelData</span>.<span class="ActionScriptDefault_Text">currentBombs</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">txtErrors</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">levelData</span>.<span class="ActionScriptDefault_Text">currentErrors</span>.<span class="ActionScriptDefault_Text">toString</span><span class="ActionScriptBracket/Brace">()</span>; 
+        <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<index>
+	<title>Source of SudoTrix</title>
+	<nodes>
+		<node label="html-template">
+			<node label="history">
+				<node label="history.css" icon="cssIcon" url="source/html-template/history/history.css.html"/>
+				<node label="history.js" url="source/html-template/history/history.js.txt"/>
+				<node label="historyFrame.html" icon="htmlIcon" url="source/html-template/history/historyFrame.html"/>
+			</node>
+			<node label="AC_OETags.js" url="source/html-template/AC_OETags.js.txt"/>
+			<node label="index.template.html" icon="htmlIcon" url="source/html-template/index.template.html"/>
+			<node label="playerProductInstall.swf" icon="swfIcon" url="source/html-template/playerProductInstall.swf"/>
+		</node>
+		<node label="lib">
+			<node label="tweener.swc" url="source/lib/tweener.swc"/>
+		</node>
+		<node label="src" icon="classpathIcon" expanded="true">
+			<node label="assets">
+				<node label="fonts">
+					<node label="showgothic.ttf" url="source/assets/fonts/showgothic.ttf"/>
+				</node>
+				<node label="skins">
+					<node label="Bricks">
+						<node label="Brick_1.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_1.png.html"/>
+						<node label="Brick_2.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_2.png.html"/>
+						<node label="Brick_3.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_3.png.html"/>
+						<node label="Brick_4.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_4.png.html"/>
+						<node label="Brick_5.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_5.png.html"/>
+						<node label="Brick_6.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_6.png.html"/>
+						<node label="Brick_7.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_7.png.html"/>
+						<node label="Brick_8.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_8.png.html"/>
+						<node label="Brick_9.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_9.png.html"/>
+						<node label="Brick_Bomb.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_Bomb.png.html"/>
+						<node label="Brick_Dead.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_Dead.png.html"/>
+						<node label="Brick_Error.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_Error.png.html"/>
+						<node label="Brick_Flash.png" icon="imageIcon" url="source/assets/skins/Bricks/Brick_Flash.png.html"/>
+					</node>
+					<node label="arrow_left.png" icon="imageIcon" url="source/assets/skins/arrow_left.png.html"/>
+					<node label="arrow_right.png" icon="imageIcon" url="source/assets/skins/arrow_right.png.html"/>
+					<node label="background.png" icon="imageIcon" url="source/assets/skins/background.png.html"/>
+					<node label="buttonBack.png" icon="imageIcon" url="source/assets/skins/buttonBack.png.html"/>
+					<node label="dot.png" icon="imageIcon" url="source/assets/skins/dot.png.html"/>
+					<node label="gamegrid.png" icon="imageIcon" url="source/assets/skins/gamegrid.png.html"/>
+					<node label="logo.png" icon="imageIcon" url="source/assets/skins/logo.png.html"/>
+					<node label="popup.png" icon="imageIcon" url="source/assets/skins/popup.png.html"/>
+				</node>
+				<node label="sounds">
+					<node label="Blocked.mp3" url="source/assets/sounds/Blocked.mp3"/>
+					<node label="Error.mp3" url="source/assets/sounds/Error.mp3"/>
+					<node label="Explosion.mp3" url="source/assets/sounds/Explosion.mp3"/>
+					<node label="FullLine.mp3" url="source/assets/sounds/FullLine.mp3"/>
+					<node label="Land.mp3" url="source/assets/sounds/Land.mp3"/>
+				</node>
+				<node label="xml">
+					<node label="levels.xml" url="source/assets/xml/levels.xml.txt"/>
+				</node>
+			</node>
+			<node label="GamePackage.controllers" icon="packageIcon" expanded="true">
+				<node label="CookieController.as" icon="actionScriptIcon" url="source/GamePackage/controllers/CookieController.as.html"/>
+				<node label="GameController.as" icon="actionScriptIcon" url="source/GamePackage/controllers/GameController.as.html"/>
+				<node label="LevelsController.as" icon="actionScriptIcon" url="source/GamePackage/controllers/LevelsController.as.html"/>
+				<node label="NumberController.as" icon="actionScriptIcon" url="source/GamePackage/controllers/NumberController.as.html"/>
+				<node label="SoundController.as" icon="actionScriptIcon" url="source/GamePackage/controllers/SoundController.as.html"/>
+				<node label="XMLReader.as" icon="actionScriptIcon" url="source/GamePackage/controllers/XMLReader.as.html"/>
+			</node>
+			<node label="GamePackage.events" icon="packageIcon" expanded="true">
+				<node label="GameEvent.as" icon="actionScriptIcon" url="source/GamePackage/events/GameEvent.as.html"/>
+			</node>
+			<node label="GamePackage.model" icon="packageIcon" expanded="true">
+				<node label="Brick.as" icon="actionScriptIcon" url="source/GamePackage/model/Brick.as.html"/>
+				<node label="LevelData.as" icon="actionScriptIcon" url="source/GamePackage/model/LevelData.as.html"/>
+				<node label="UserData.as" icon="actionScriptIcon" url="source/GamePackage/model/UserData.as.html"/>
+			</node>
+			<node label="GamePackage.pages" icon="packageIcon" expanded="true">
+				<node label="Credits.as" icon="actionScriptIcon" url="source/GamePackage/pages/Credits.as.html"/>
+				<node label="Howto.as" icon="actionScriptIcon" url="source/GamePackage/pages/Howto.as.html"/>
+				<node label="LevelSelector.as" icon="actionScriptIcon" url="source/GamePackage/pages/LevelSelector.as.html"/>
+				<node label="Loading.as" icon="actionScriptIcon" url="source/GamePackage/pages/Loading.as.html"/>
+				<node label="Menu.as" icon="actionScriptIcon" url="source/GamePackage/pages/Menu.as.html"/>
+			</node>
+			<node label="GamePackage.screenitems" icon="packageIcon" expanded="true">
+				<node label="Button.as" icon="actionScriptIcon" url="source/GamePackage/screenitems/Button.as.html"/>
+				<node label="ExplodeDisolve.as" icon="actionScriptIcon" url="source/GamePackage/screenitems/ExplodeDisolve.as.html"/>
+				<node label="FormattedText.as" icon="actionScriptIcon" url="source/GamePackage/screenitems/FormattedText.as.html"/>
+				<node label="ImageButton.as" icon="actionScriptIcon" url="source/GamePackage/screenitems/ImageButton.as.html"/>
+				<node label="Playfield.as" icon="actionScriptIcon" url="source/GamePackage/screenitems/Playfield.as.html"/>
+				<node label="Popup.as" icon="actionScriptIcon" url="source/GamePackage/screenitems/Popup.as.html"/>
+				<node label="Scorebord.as" icon="actionScriptIcon" url="source/GamePackage/screenitems/Scorebord.as.html"/>
+			</node>
+			<node selected="true" label="SudoTrix.as" icon="mxmlAppIcon" url="source/SudoTrix.as.html"/>
+		</node>
+	</nodes>
+</index>

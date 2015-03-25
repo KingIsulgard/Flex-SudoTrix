@@ -1,0 +1,280 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>SudoTrix.as</title>
+<link rel="stylesheet" type="text/css" href="../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">controllers</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">model</span>.<span class="ActionScriptDefault_Text">UserData</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">pages</span>.<span class="ActionScriptOperator">*</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptOperator">*</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">BitmapAsset</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * @author Gilles Lesire - 2009
+     * This class is the main controller for the application: 
+     * - creates and controls the underlying classes
+     * - keeps data of what item is being shown
+     * - creates event listeners to know when an object needs to be terminated
+     * - propagate keyboard events to the underlying objects
+     * - Catches thrown events and acts to it or propagates it
+     */</span>    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">SudoTrix</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Sprite</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Embed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;assets/skins/background.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span> <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Background</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">background</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BitmapAsset</span>;     
+        
+        <span class="ActionScriptComment">// Create items to show
+</span>        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">game</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">GameController</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">menu</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Menu</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">credits</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Credits</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">howto</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Howto</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">loading</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Loading</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">levelSelector</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">LevelSelector</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">userData</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">UserData</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">windowOpened</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">soundController</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SoundController</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">levelsController</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">LevelsController</span>;    
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">cookieController</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">CookieController</span>;
+        
+        <span class="ActionScriptComment">// Keyboard codes
+</span>        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">LEFT_ARROW</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 37;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">UP_ARROW</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 38;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">RIGHT_ARROW</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 39;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">DOWN_ARROW</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 40;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">P_KEY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 80;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">Y_KEY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 89;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">N_KEY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 78;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">SPACE_KEY</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> 32;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">SudoTrix</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">stage</span>.<span class="ActionScriptDefault_Text">scaleMode</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">StageScaleMode</span>.<span class="ActionScriptDefault_Text">NO_SCALE</span>;
+            <span class="ActionScriptDefault_Text">stage</span>.<span class="ActionScriptDefault_Text">align</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">StageAlign</span>.<span class="ActionScriptDefault_Text">TOP_LEFT</span>;
+            
+            <span class="ActionScriptComment">// Set background to game
+</span>            <span class="ActionScriptDefault_Text">background</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Background</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">background</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Set keyboard listeners
+</span>            <span class="ActionScriptDefault_Text">stage</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">KeyboardEvent</span>.<span class="ActionScriptDefault_Text">KEY_DOWN</span>, <span class="ActionScriptDefault_Text">checkKeysDown</span><span class="ActionScriptBracket/Brace">)</span>;    
+            <span class="ActionScriptDefault_Text">stage</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">KeyboardEvent</span>.<span class="ActionScriptDefault_Text">KEY_UP</span>, <span class="ActionScriptDefault_Text">checkKeysUp</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Load cookies
+</span>            <span class="ActionScriptDefault_Text">cookieController</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">CookieController</span><span class="ActionScriptBracket/Brace">()</span>
+            
+            <span class="ActionScriptComment">// Get userData
+</span>            <span class="ActionScriptDefault_Text">userData</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">cookieController</span>.<span class="ActionScriptDefault_Text">read</span><span class="ActionScriptBracket/Brace">()</span>;        
+            
+            <span class="ActionScriptComment">// Load sounds
+</span>            <span class="ActionScriptDefault_Text">soundController</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">SoundController</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">soundController</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">SoundController</span>.<span class="ActionScriptDefault_Text">SOUNDS_LOADED</span>, <span class="ActionScriptDefault_Text">onLoaded</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Get level information
+</span>            <span class="ActionScriptDefault_Text">levelsController</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">LevelsController</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">levelsController</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">LevelsController</span>.<span class="ActionScriptDefault_Text">LEVELS_LOADED</span>, <span class="ActionScriptDefault_Text">onLoaded</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Display loading message
+</span>            <span class="ActionScriptDefault_Text">loading</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Loading</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">loading</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span> 
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onLoaded</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">soundController</span>.<span class="ActionScriptDefault_Text">isLoaded</span> <span class="ActionScriptOperator">&amp;&amp;</span> <span class="ActionScriptDefault_Text">levelsController</span>.<span class="ActionScriptDefault_Text">isLoaded</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">allLoaded</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">allLoaded</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Remove loading message
+</span>            <span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">loading</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Open menu
+</span>            <span class="ActionScriptDefault_Text">openMenu</span><span class="ActionScriptBracket/Brace">()</span>;    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">removeAll</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;menu&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">menu</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;game&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">game</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;credits&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">credits</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;howto&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">howto</span><span class="ActionScriptBracket/Brace">)</span>;    
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;selector&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">levelSelector</span><span class="ActionScriptBracket/Brace">)</span>;                
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">openMenu</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">removeAll</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;menu&quot;</span>;
+            
+            <span class="ActionScriptDefault_Text">menu</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Menu</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Menu</span>.<span class="ActionScriptDefault_Text">OPEN_GAME</span>, <span class="ActionScriptDefault_Text">onGameOpen</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Menu</span>.<span class="ActionScriptDefault_Text">OPEN_CREDITS</span>, <span class="ActionScriptDefault_Text">onCreditsOpen</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">menu</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Menu</span>.<span class="ActionScriptDefault_Text">OPEN_HOWTO</span>, <span class="ActionScriptDefault_Text">onHowtoOpen</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">menu</span><span class="ActionScriptBracket/Brace">)</span>;            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">openCredits</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">removeAll</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;credits&quot;</span>;
+            
+            <span class="ActionScriptDefault_Text">credits</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Credits</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">credits</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(C</span><span class="ActionScriptDefault_Text">redits</span>.<span class="ActionScriptDefault_Text">OPEN_MENU</span>, <span class="ActionScriptDefault_Text">onOpenMenu</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">credits</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">openHowto</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">removeAll</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;howto&quot;</span>;
+            
+            <span class="ActionScriptDefault_Text">howto</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Howto</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">howto</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Howto</span>.<span class="ActionScriptDefault_Text">OPEN_MENU</span>, <span class="ActionScriptDefault_Text">onOpenMenu</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">howto</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">openLevelSelector</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Clear screen    
+</span>            <span class="ActionScriptDefault_Text">removeAll</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;selector&quot;</span>;
+            
+            <span class="ActionScriptComment">// Create a levelselector
+</span>            <span class="ActionScriptDefault_Text">levelSelector</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">LevelSelector</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">gameLevel</span>, <span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">achievedLevel</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Add event listeners
+</span>            <span class="ActionScriptDefault_Text">levelSelector</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameEvent</span>.<span class="ActionScriptDefault_Text">START</span>, <span class="ActionScriptDefault_Text">onStartGame</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">levelSelector</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">LevelSelector</span>.<span class="ActionScriptDefault_Text">OPEN_MENU</span>, <span class="ActionScriptDefault_Text">onOpenMenu</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptComment">// Add to screen
+</span>            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">levelSelector</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onStartGame</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">GameEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptComment">// Set level
+</span>            <span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">gameLevel</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">level</span>;
+            
+            <span class="ActionScriptComment">// Start game of the selected level
+</span>            <span class="ActionScriptDefault_Text">startGame</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">startGame</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">removeAll</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">gameLevel</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptDefault_Text">levelsController</span>.<span class="ActionScriptDefault_Text">getAmountLevels</span><span class="ActionScriptBracket/Brace">())</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">openMenu</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptBracket/Brace">}</span> <span class="ActionScriptReserved">else</span> <span class="ActionScriptBracket/Brace">{</span>            
+                <span class="ActionScriptDefault_Text">game</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">GameController</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">levelsController</span>.<span class="ActionScriptDefault_Text">getLevel</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">gameLevel</span><span class="ActionScriptBracket/Brace">)</span>, <span class="ActionScriptDefault_Text">levelsController</span>.<span class="ActionScriptDefault_Text">getAmountLevels</span><span class="ActionScriptBracket/Brace">())</span>;
+                <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">game</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;game&quot;</span>;
+                
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">GAME_FAILED</span>, <span class="ActionScriptDefault_Text">onOpenMenu</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">GAME_FINISHED</span>, <span class="ActionScriptDefault_Text">onGameFinished</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">NEXT_LEVEL</span>, <span class="ActionScriptDefault_Text">onGameOpen</span><span class="ActionScriptBracket/Brace">)</span>;
+                
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_EXPLOSION</span>, <span class="ActionScriptDefault_Text">onSoundEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_BLOCKED</span>, <span class="ActionScriptDefault_Text">onSoundEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_LAND</span>, <span class="ActionScriptDefault_Text">onSoundEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_FULL</span>, <span class="ActionScriptDefault_Text">onSoundEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_ERROR</span>, <span class="ActionScriptDefault_Text">onSoundEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_DIE</span>, <span class="ActionScriptDefault_Text">onSoundEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_ERROR</span>, <span class="ActionScriptDefault_Text">onSoundEvent</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onOpenMenu</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">openMenu</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onGameFinished</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">gameLevel</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">achievedLevel</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">achievedLevel</span> <span class="ActionScriptOperator">&lt;</span> <span class="ActionScriptDefault_Text">levelsController</span>.<span class="ActionScriptDefault_Text">getAmountLevels</span><span class="ActionScriptBracket/Brace">())</span>
+                    <span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">achievedLevel</span><span class="ActionScriptOperator">++</span>;
+                    
+                <span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">gameLevel</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">userData</span>.<span class="ActionScriptDefault_Text">achievedLevel</span>;
+                
+                <span class="ActionScriptDefault_Text">cookieController</span>.<span class="ActionScriptDefault_Text">save</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">userData</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onGameOpen</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">openLevelSelector</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onCreditsOpen</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">openCredits</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onHowtoOpen</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">openHowto</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onSoundEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_EXPLOSION</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">soundController</span>.<span class="ActionScriptDefault_Text">playExplosion</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_LAND</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">soundController</span>.<span class="ActionScriptDefault_Text">playLand</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_BLOCKED</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">soundController</span>.<span class="ActionScriptDefault_Text">playBlocked</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_FULL</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">soundController</span>.<span class="ActionScriptDefault_Text">playFull</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_ERROR</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">soundController</span>.<span class="ActionScriptDefault_Text">playError</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">type</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">GameController</span>.<span class="ActionScriptDefault_Text">SOUND_DIE</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptDefault_Text">soundController</span>.<span class="ActionScriptDefault_Text">playDie</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">checkKeysDown</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">KeyboardEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>        
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">windowOpened</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptString">&quot;game&quot;</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">LEFT_ARROW</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">setLeftDown</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">RIGHT_ARROW</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">setRightDown</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">DOWN_ARROW</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">setDownDown</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">UP_ARROW</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">setUpDown</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">P_KEY</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">setPDown</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">Y_KEY</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">setYDown</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">N_KEY</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">setNDown</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">SPACE_KEY</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">setSpaceDown</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">checkKeysUp</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">KeyboardEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">keyCode</span> <span class="ActionScriptOperator">==</span> <span class="ActionScriptDefault_Text">DOWN_ARROW</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">game</span>.<span class="ActionScriptDefault_Text">setDownDown</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">false</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

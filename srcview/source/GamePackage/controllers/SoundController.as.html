@@ -1,0 +1,95 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>SoundController.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">controllers</span> <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">media</span>.<span class="ActionScriptDefault_Text">Sound</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">URLRequest</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * @author Gilles Lesire - 2009
+     * This class controls all sounds
+     * - loads sounds
+     * - keeps a follow up of the loading progress
+     * - play sounds
+     */</span>    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">SoundController</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">EventDispatcher</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">SOUNDS_LOADING</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Loading&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">SOUNDS_LOADED</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Loaded&quot;</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">explosion</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sound</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">blocked</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sound</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">land</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sound</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">full</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sound</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">error</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sound</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">die</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sound</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">isLoaded</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">songsLoading</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">SoundController</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">isLoaded</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptDefault_Text">songsLoading</span> <span class="ActionScriptOperator">=</span> 0;
+            
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">SOUNDS_LOADING</span><span class="ActionScriptBracket/Brace">))</span>;
+        
+            <span class="ActionScriptDefault_Text">explosion</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">loadSound</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;assets/sounds/Explosion.mp3&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptDefault_Text">blocked</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">loadSound</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;assets/sounds/Blocked.mp3&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptDefault_Text">land</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">loadSound</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;assets/sounds/Land.mp3&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptDefault_Text">full</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">loadSound</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;assets/sounds/FullLine.mp3&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptDefault_Text">error</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">loadSound</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;assets/sounds/Error.mp3&quot;</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptDefault_Text">die</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">loadSound</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;assets/sounds/FullLine.mp3&quot;</span><span class="ActionScriptBracket/Brace">))</span>;        
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">songLoaded</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">songsLoading</span><span class="ActionScriptOperator">--</span>;
+            
+            <span class="ActionScriptReserved">if</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">songsLoading</span> <span class="ActionScriptOperator">==</span> 0<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">isLoaded</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+                <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">SOUNDS_LOADED</span><span class="ActionScriptBracket/Brace">))</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">loadSound</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">urlRequest</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sound</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">songsLoading</span><span class="ActionScriptOperator">++</span>;
+            
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">sound</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Sound</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Sound</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">sound</span>.<span class="ActionScriptDefault_Text">load</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">urlRequest</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">sound</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">COMPLETE</span>, <span class="ActionScriptDefault_Text">songLoaded</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">sound</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">playExplosion</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">explosion</span>.<span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">playBlocked</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">blocked</span>.<span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">playLand</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">land</span>.<span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">playFull</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">full</span>.<span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">playError</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">error</span>.<span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">playDie</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">die</span>.<span class="ActionScriptDefault_Text">play</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

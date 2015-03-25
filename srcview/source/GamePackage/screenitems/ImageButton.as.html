@@ -1,0 +1,54 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ImageButton.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">screenitems</span>
+<span class="ActionScriptBracket/Brace">{</span>    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">display</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptOperator">*</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">BitmapAsset</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * @author Gilles Lesire - 2009
+     * This class builds a button
+     * - creates the images
+     * - change mouse pointer on hover
+     * - creates mouseOver effect
+     */</span>     
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ImageButton</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Sprite</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">front</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BitmapAsset</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">back</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BitmapAsset</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ImageButton</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">buttonFront</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BitmapAsset</span>, <span class="ActionScriptDefault_Text">buttonBack</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BitmapAsset</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">front</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">buttonFront</span>;
+            <span class="ActionScriptDefault_Text">back</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">buttonBack</span>;
+            
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">buttonFront</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">MOUSE_OVER</span>, <span class="ActionScriptDefault_Text">mouseOver</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MouseEvent</span>.<span class="ActionScriptDefault_Text">MOUSE_OUT</span>, <span class="ActionScriptDefault_Text">mouseOut</span><span class="ActionScriptBracket/Brace">)</span>;
+            
+            <span class="ActionScriptDefault_Text">buttonMode</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">mouseOver</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">back</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">front</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">mouseOut</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MouseEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">front</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">removeChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">back</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

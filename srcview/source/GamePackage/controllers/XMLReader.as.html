@@ -1,0 +1,67 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>XMLReader.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">controllers</span> <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">GamePackage</span>.<span class="ActionScriptDefault_Text">model</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">URLLoader</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">URLRequest</span>;
+    
+    <span class="ActionScriptASDoc">/**
+     * @author Gilles Lesire - 2009
+     * This class reads an XML file
+     * - can be asked for the content of an xml file
+     * - keeps a follow up of the loading progress
+     * - reads an xml file
+     */</span>    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">XMLReader</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">EventDispatcher</span> <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">XML_LOADING</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Loading&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">XML_LOADED</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Loaded&quot;</span>;
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">urlRequest</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">URLRequest</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">urlLoader</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">URLLoader</span>;        
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">fileToRead</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">loadProgress</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">isLoaded</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">data</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">XML</span>;
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">XMLReader</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">fileToRead</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">fileToRead</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">fileToRead</span>;
+            <span class="ActionScriptDefault_Text">isLoaded</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">read</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">urlRequest</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">fileToRead</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">urlLoader</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">()</span>;
+            
+            <span class="ActionScriptDefault_Text">urlLoader</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ProgressEvent</span>.<span class="ActionScriptDefault_Text">PROGRESS</span>, <span class="ActionScriptDefault_Text">onLoading</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">urlLoader</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">COMPLETE</span>, <span class="ActionScriptDefault_Text">onLoaded</span><span class="ActionScriptBracket/Brace">)</span>;        
+            <span class="ActionScriptDefault_Text">urlLoader</span>.<span class="ActionScriptDefault_Text">load</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">urlRequest</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onLoading</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ProgressEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">loadProgress</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">bytesLoaded</span> <span class="ActionScriptOperator">/</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">bytesTotal</span> <span class="ActionScriptOperator">*</span> 100;
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">XML_LOADING</span><span class="ActionScriptBracket/Brace">))</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">onLoaded</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">isLoaded</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">true</span>;
+            
+            <span class="ActionScriptDefault_Text">data</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">XML</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">XML_LOADED</span><span class="ActionScriptBracket/Brace">))</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getLoadProgress</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">loadProgress</span>;
+        <span class="ActionScriptBracket/Brace">}</span>    
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>
